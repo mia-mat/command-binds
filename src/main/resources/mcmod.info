@@ -1,0 +1,15 @@
+[
+{
+  "modid": "commandbinds",
+  "name": "Command Binds",
+  "description": "<3",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://miaw.ws",
+  "updateUrl": "",
+  "authorList": ["mia"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
