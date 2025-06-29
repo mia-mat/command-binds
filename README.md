@@ -3,7 +3,7 @@ A 1.8.9 Forge QOL Mod
 **Allows for the assignment of key combinations to commands**
 
 ### Commands:  
-- **/addbind \<command\>**: Assign a command to  
+- **/addbind \<command\>**: Assign a command to a key combination  
 - **/removebind \<command\>**: Remove the bind for a given command  
 - **/commandbinds**: list the currently assigned binds
 - **/togglebindexclusivity**: toggle whether the mod considers all keys when checking for a keybind
