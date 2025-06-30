@@ -49,7 +49,7 @@ public class ClearCommandBindsCommand extends CommandBase {
         if (!confirmFlag) {
             ChatUtil.sendMessage("You currently have "
                     + ChatFormatting.LIGHT_PURPLE + bindsSize
-                    + ChatFormatting.WHITE + " binds!");
+                    + ChatFormatting.WHITE + " bind" + optionalPlural(bindsSize) + "!");
             ChatUtil.sendMessage("To confirm this action, run /clearbinds again within 10 seconds.");
 
             confirmFlag = true;
@@ -67,9 +67,15 @@ public class ClearCommandBindsCommand extends CommandBase {
         timeoutTimer.cancel();
         timeoutTimer = new Timer(); // previous timer is discarded
 
-        ChatUtil.sendMessage("Removed " + ChatFormatting.LIGHT_PURPLE + bindsSize + ChatFormatting.WHITE + " binds.");
+        ChatUtil.sendMessage("Removed " + ChatFormatting.LIGHT_PURPLE + bindsSize + ChatFormatting.WHITE
+                + " bind" + optionalPlural(bindsSize) + ".");
         config.clearBinds();
         confirmFlag = false;
 
+    }
+
+    private String optionalPlural(int count) {
+        if (count != 1) return "s";
+        return "";
     }
 }

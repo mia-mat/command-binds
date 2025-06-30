@@ -6,8 +6,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BindHandler {
 
@@ -18,6 +21,12 @@ public class BindHandler {
     private static Set<String> commandsLastTick = new HashSet<>();
 
     private static Set<Integer> keysLastTick = new HashSet<>();
+
+    // checking for keys last tick when registering the bind often leads to missing some keys
+    // as the user cannot perfectly time releasing all keys, so give some freedom
+    private static final int TICK_MARGIN = 5;
+    private static long tickCount;
+    private static HashMap<Integer, Long> keysPressedWithMargin = new HashMap<>(); // value represents tick count at which key was pressed
 
     /// sets vars for #onClientTick to listen for binds for the given command
     public static void startBindingProcess(String command) {
@@ -46,6 +55,8 @@ public class BindHandler {
         if (Minecraft.getMinecraft().currentScreen != null) return;
         if(Minecraft.getMinecraft().thePlayer == null) return;
 
+        tickCount++;
+
         Set<Integer> pressedThisTick = KeyboardUtil.getCurrentlyPressedKeys();
 
         if (currentlyBindingCommand != null) {
@@ -69,7 +80,7 @@ public class BindHandler {
 
             if (pressedThisTick.size() == 0) {
                 if (!waitingForInput) { // actually wait for input before deciding that it's finished
-                    attemptBindCommand(keysLastTick, currentlyBindingCommand);
+                    attemptBindCommand(new HashSet<>(keysPressedWithMargin.keySet()), currentlyBindingCommand);
                     currentlyBindingCommand = null;
                 }
             } else {
@@ -89,6 +100,17 @@ public class BindHandler {
         }
 
         keysLastTick = pressedThisTick;
+
+        HashMap<Integer, Long> keysThisTickTimedMap = new HashMap<>();
+        pressedThisTick.forEach(key -> keysThisTickTimedMap.put(key, tickCount));
+
+        keysPressedWithMargin.putAll(keysThisTickTimedMap);
+        Set<Integer> keysToRemove = keysPressedWithMargin.entrySet().stream()
+                .filter(entry -> entry.getValue()+TICK_MARGIN < tickCount)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+        keysToRemove.forEach(key-> keysPressedWithMargin.remove(key));
+
     }
 
     public static String normalizeSlash(String command) {
