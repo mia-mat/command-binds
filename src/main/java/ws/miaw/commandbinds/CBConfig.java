@@ -97,6 +97,11 @@ public class CBConfig implements Serializable {
         return removed;
     }
 
+    public void clearBinds() {
+        binds.clear();
+        save();
+    }
+
     public Map<Set<Integer>, String> getBindMap() {
         return Collections.unmodifiableMap(binds);
     }
@@ -127,7 +132,6 @@ public class CBConfig implements Serializable {
 
                         // rename old file to save and create a new one; the old one is either of an old version or corrupted.
                         CommandBindsMod.getLogger().warn("Could not load binds configuration, attempting to create a new one.");
-                        e.printStackTrace();
 
                         File oldBinds = new File(SAVE_FILE.getParent(), SAVE_FILE.getName() + "-old");
 

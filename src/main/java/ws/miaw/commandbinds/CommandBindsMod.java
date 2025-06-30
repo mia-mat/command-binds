@@ -7,16 +7,13 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-import ws.miaw.commandbinds.command.AddBindCommand;
-import ws.miaw.commandbinds.command.CommandBindsCommand;
-import ws.miaw.commandbinds.command.RemoveBindCommand;
-import ws.miaw.commandbinds.command.ToggleBindExclusivityCommand;
+import ws.miaw.commandbinds.command.*;
 
 @Mod(modid = CommandBindsMod.MODID, version = CommandBindsMod.VERSION)
 public class CommandBindsMod
 {
     public static final String MODID = "commandbinds";
-    public static final String VERSION = "1.2";
+    public static final String VERSION = "1.3";
 
     private static CBConfig config;
 
@@ -36,6 +33,7 @@ public class CommandBindsMod
         MinecraftForge.EVENT_BUS.register(new BindHandler());
 
         ClientCommandHandler.instance.registerCommand(new AddBindCommand());
+        ClientCommandHandler.instance.registerCommand(new ClearCommandBindsCommand());
         ClientCommandHandler.instance.registerCommand(new CommandBindsCommand());
         ClientCommandHandler.instance.registerCommand(new RemoveBindCommand());
         ClientCommandHandler.instance.registerCommand(new ToggleBindExclusivityCommand());
