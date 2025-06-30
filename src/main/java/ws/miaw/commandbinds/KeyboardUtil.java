@@ -8,6 +8,8 @@ public class KeyboardUtil {
 
     private static final Map<Integer, String> keyMap = new HashMap<>();
 
+    private static final Set<Integer> modifierKeys = new HashSet<>();
+
     static {
         keyMap.put(Keyboard.KEY_BACK, "Backspace");
         keyMap.put(Keyboard.KEY_LBRACKET, "Left Bracket");
@@ -31,6 +33,13 @@ public class KeyboardUtil {
         keyMap.put(Keyboard.KEY_NEXT, "Page Down");
         keyMap.put(Keyboard.KEY_LMETA, "Left Meta");
         keyMap.put(Keyboard.KEY_RMETA, "Right Meta");
+
+        modifierKeys.addAll(Arrays.asList(
+                Keyboard.KEY_LCONTROL, Keyboard.KEY_RCONTROL,
+                Keyboard.KEY_LSHIFT, Keyboard.KEY_RSHIFT,
+                Keyboard.KEY_LMENU, Keyboard.KEY_RMENU,
+                Keyboard.KEY_LMETA, Keyboard.KEY_RMETA
+        ));
     }
 
     // differs from the keyboard method in that it has human bindings for meta keys
@@ -55,20 +64,43 @@ public class KeyboardUtil {
     }
 
     public static String getBindString(Set<Integer> keys) {
-        // in the format <key1>, <key2>, <key3>...
+        // in the format <modifier key 1>, <key1>, <key2>, <key3>...
         // sorted alphabetically
-        // e.g. Backspace, Enter, Right Ctrl
+        // e.g. Backspace, Right Ctrl, A, Enter
 
-        StringBuilder stringBuilder = new StringBuilder();
+        Set<Integer> modifiers = new HashSet<>();
+        Set<Integer> nonModifiers = new HashSet<>();
+        keys.forEach(key -> {
+            if(modifierKeys.contains(key)) {
+                modifiers.add(key);
+            } else nonModifiers.add(key);
+        });
 
-        keys.stream()
+        StringBuilder modifierBuilder = new StringBuilder();
+        modifiers.stream()
                 .map(KeyboardUtil::getReadableKeyName)
                 .sorted(Comparator.naturalOrder())
                 .forEachOrdered(keyName -> {
-                    stringBuilder.append(keyName).append(", ");
+                    modifierBuilder.append(keyName).append(", ");
                 });
 
-        return stringBuilder.substring(0, stringBuilder.length()-2).trim();
+        StringBuilder nonModifierBuilder = new StringBuilder();
+        nonModifiers.stream()
+                .map(KeyboardUtil::getReadableKeyName)
+                .sorted(Comparator.naturalOrder())
+                .forEachOrdered(keyName -> {
+                    nonModifierBuilder.append(keyName).append(", ");
+                });
+
+        if(modifiers.size() == 0) {
+            return nonModifierBuilder.substring(0, nonModifierBuilder.length()-2).trim();
+        }
+
+        if(nonModifiers.size() == 0) {
+            return modifierBuilder.substring(0, modifierBuilder.length()-2).trim();
+        }
+
+        return modifierBuilder.toString().trim() + " " + nonModifierBuilder.substring(0, nonModifierBuilder.length()-2).trim();
     }
 
     public static Set<Integer> getCurrentlyPressedKeys() {

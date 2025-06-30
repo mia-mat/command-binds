@@ -26,9 +26,9 @@ public class BindHandler {
     }
 
     private static void attemptBindCommand(Set<Integer> keys, String command) {
-        String bindString = KeyboardUtil.getBindString(keys);
+        command = normalizeSlash(command);
 
-        if(!command.startsWith("/")) command = "/"+command;
+        String bindString = KeyboardUtil.getBindString(keys);
 
         if (!CommandBindsMod.getConfig().hasBind(keys)) {
             ChatUtil.sendMessage("Created bind for '" + command + "': " + ChatFormatting.LIGHT_PURPLE + bindString);
@@ -81,8 +81,9 @@ public class BindHandler {
             CommandBindsMod.getConfig().getBindsForHandling(pressedThisTick).forEach(command -> {
                 commandsThisTick.add(command); // don't spam execute the bind every tick while held
                 if(!commandsLastTick.contains(command)) {
-                    System.out.println(command);
-                    Minecraft.getMinecraft().thePlayer.sendChatMessage(command);
+                    String execCommand = command;
+                    if(!execCommand.startsWith("/")) execCommand = "/"+execCommand;
+                    Minecraft.getMinecraft().thePlayer.sendChatMessage(execCommand);
                 }
 
             });
@@ -90,6 +91,11 @@ public class BindHandler {
         }
 
         keysLastTick = pressedThisTick;
+    }
+
+    public static String normalizeSlash(String command) {
+        if(command.startsWith("/")) return command;
+        return "/" + command;
     }
 
 }

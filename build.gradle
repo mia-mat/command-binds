@@ -20,9 +20,9 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.1"
+version = "1.2"
 group= "ws.miaw.commandbinds" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "^-^ commandbinds"
+archivesBaseName = "commandbinds"
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"

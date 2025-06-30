@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import org.lwjgl.input.Keyboard;
+import ws.miaw.commandbinds.BindHandler;
 import ws.miaw.commandbinds.ChatUtil;
 import ws.miaw.commandbinds.CommandBindsMod;
 import ws.miaw.commandbinds.KeyboardUtil;
@@ -55,7 +56,8 @@ public class CommandBindsCommand  extends CommandBase {
 
         List<String> str = new ArrayList<>();
         for(Set<Integer> key : binds.keySet()) {
-            str.add("[" + ChatFormatting.LIGHT_PURPLE + KeyboardUtil.getBindString(key) + ChatFormatting.WHITE + "] - " + binds.get(key));
+            String bind = BindHandler.normalizeSlash(binds.get(key));
+            str.add("[" + ChatFormatting.LIGHT_PURPLE + KeyboardUtil.getBindString(key) + ChatFormatting.WHITE + "]: " + bind);
         }
         return str;
     }

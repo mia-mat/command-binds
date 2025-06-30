@@ -47,6 +47,7 @@ public class AddBindCommand extends CommandBase {
             builder.append(args[i]).append(" ");
         }
         String command = builder.toString().trim();
+        command = BindHandler.normalizeSlash(command);
 
         BindHandler.startBindingProcess(command);
         ChatUtil.sendMessage("Press, then release, the keys to bind to '" + command  + "'");

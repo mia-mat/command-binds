@@ -3,6 +3,7 @@ package ws.miaw.commandbinds.command;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import ws.miaw.commandbinds.BindHandler;
 import ws.miaw.commandbinds.ChatUtil;
 import ws.miaw.commandbinds.CommandBindsMod;
 
@@ -44,6 +45,7 @@ public class RemoveBindCommand extends CommandBase {
             commandBuilder.append(args[i]).append(" ");
         }
         String command = commandBuilder.toString().trim();
+        command = BindHandler.normalizeSlash(command);
 
         if (!CommandBindsMod.getConfig().hasBind(command)) {
             ChatUtil.sendErorMessage("No bind found for command '" + ChatFormatting.WHITE + command + ChatFormatting.RED + "'");
