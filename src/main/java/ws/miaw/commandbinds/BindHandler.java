@@ -81,9 +81,7 @@ public class BindHandler {
             CommandBindsMod.getConfig().getBindsForHandling(pressedThisTick).forEach(command -> {
                 commandsThisTick.add(command); // don't spam execute the bind every tick while held
                 if(!commandsLastTick.contains(command)) {
-                    String execCommand = command;
-                    if(!execCommand.startsWith("/")) execCommand = "/"+execCommand;
-                    Minecraft.getMinecraft().thePlayer.sendChatMessage(execCommand);
+                    Minecraft.getMinecraft().thePlayer.sendChatMessage(normalizeSlash(command));
                 }
 
             });
